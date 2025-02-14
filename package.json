@@ -1,0 +1,36 @@
+{
+  "name": "javascript-dsp-examples",
+  "homepage": "https://www.reelyactive.com",
+  "author": {
+    "name": "reelyActive",
+    "email": "info@reelyactive.com"
+  },
+  "description": "Examples of digital signal processing in pure JavaScript.  We believe in an open Internet of Things.",
+  "keywords": [
+    "DSP",
+    "FFT",
+    "JavaScript"
+  ],
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reelyactive/javascript-dsp-examples.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "velocityoverall": "node bin/velocityoverall"
+  },
+  "bugs": {
+    "url": "https://github.com/reelyactive/javascript-dsp-examples/issues"
+  },
+  "contributors": [
+    { "name": "Jeffrey Dungen" }
+  ],
+  "license": "MIT"
+}

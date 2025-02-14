@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+const utils = require('../lib/utils.js');
+
+// Edit the following parameters as required
+const SAMPLING_RATE = 2560;
+const NUMBER_OF_SAMPLES = 4096;
+const MIN_FILTER_FREQUENCY = 10;
+const MAX_FILTER_FREQUENCY = 1000;
+
+// Adapt this function to generate acceleration sample values (in m/s2)
+function generateAccelerationSample(element, index) {
+  return 2 * (Math.random() - 0.5);
+}
+
+// The samples will be generated using the above function
+const samples = Array(NUMBER_OF_SAMPLES).fill().map(generateAccelerationSample);
+
+// Start timing the operation
+let startTime = Date.now();
+
+// Perform a FFT on the samples
+let fft = utils.fft(samples, SAMPLING_RATE);
+
+// Integrate over frequency (within filter window) to get velocities
+let filteredVelocities = [];
+for(let bin = 0; bin < fft.numberOfBins; bin++) {
+  if((fft.frequencies[bin] >= MIN_FILTER_FREQUENCY) &&
+     (fft.frequencies[bin] <= MAX_FILTER_FREQUENCY)) {
+    let velocity = fft.magnitudes[bin] / fft.frequencies[bin];
+    filteredVelocities.push(velocity); 
+  }
+}
+
+// Take RMS of velocities to obtain velocity overall
+let velocityOverall = utils.rms(filteredVelocities);
+
+// TODO: Hann window?
+
+console.log('Completed in', Date.now() - startTime, 'ms');
+console.log('velocityOverall:', velocityOverall, 'm/s');
+console.log('Calculated using', filteredVelocities.length, 'bins filtered from',
+            fft.numberOfBins, 'FFT bins');
