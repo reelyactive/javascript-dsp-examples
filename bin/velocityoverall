@@ -10,7 +10,7 @@ const MAX_FILTER_FREQUENCY = 1000;
 
 // Adapt this function to generate acceleration sample values (in m/s2)
 function generateAccelerationSample(element, index) {
-  return 2 * (Math.random() - 0.5);
+  return 9.8 * 2 * (Math.random() - 0.5);
 }
 
 // The samples will be generated using the above function
@@ -19,8 +19,11 @@ const samples = Array(NUMBER_OF_SAMPLES).fill().map(generateAccelerationSample);
 // Start timing the operation
 let startTime = Date.now();
 
-// Perform a FFT on the samples
-let fft = utils.fft(samples, SAMPLING_RATE);
+// Apply a Hann window to the time series
+let windowedSamples = utils.hannWindow(samples);
+
+// Perform a FFT on the windowed samples
+let fft = utils.fft(windowedSamples, SAMPLING_RATE);
 
 // Integrate over frequency (within filter window) to get velocities
 let filteredVelocities = [];
@@ -32,10 +35,9 @@ for(let bin = 0; bin < fft.numberOfBins; bin++) {
   }
 }
 
-// Take RMS of velocities to obtain velocity overall
-let velocityOverall = utils.rms(filteredVelocities);
-
-// TODO: Hann window?
+// Take the RMS of the velocities divided by the square root of the noise
+// bandwidth of the Hann window (1.5) to obtain velocity overall
+let velocityOverall = utils.rms(filteredVelocities) / Math.sqrt(1.5);
 
 console.log('Completed in', Date.now() - startTime, 'ms');
 console.log('velocityOverall:', velocityOverall, 'm/s');
