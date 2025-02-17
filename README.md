@@ -24,22 +24,22 @@ The velocity overall is calculated as follows:
 Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in [bin/velocityoverall](bin/velocityoverall) to test different scenarios.
 
 
-utils.js
---------
+dsp.js
+------
 
-The `utils.js` file provides a JavaScript implementation of a Fast Fourier Transform (FFT) and root mean square calculation.
+The [lib/dsp.js](lib/dsp.js) file provides a JavaScript implementation of a Fast Fourier Transform (FFT), Hann window, and root mean square calculation.
 
 ### fft(samples, samplingRate)
 
 Compute the Fast Fourier Transform of the given Array of samples captured at the given samplingRate (typically in Hz).  For example, [the original test case](https://github.com/vail-systems/node-fft/tree/master?tab=readme-ov-file#command-line) would be implemented as follows:
 
 ```javascript
-const utils = require('./lib/utils.js'); // Edit path as required
+const dsp = require('./lib/dsp.js'); // Edit path as required
 
 let samples = [ 1, 1, 1, 1, 0, 0, 0, 0 ];
 let samplingRate = 44100;
 
-console.log(utils.fft(samples, samplingRate));
+console.log(dsp.fft(samples, samplingRate));
 // {
 //   magnitudes: [ 4, 2.613125929752753, 0, 1.0823922002923938 ],
 //   frequencies: [ 0, 5512.5, 11025, 16537.5 ],
@@ -52,11 +52,11 @@ console.log(utils.fft(samples, samplingRate));
 Compute the Hann window of the given samples, returning the windowed samples as a new Array.
 
 ```javascript
-const utils = require('./lib/utils.js'); // Edit path as required
+const dsp = require('./lib/dsp.js'); // Edit path as required
 
 let values = [ 1, -1, 1, -1, 1 ];
 
-console.log(utils.hannWindow(values));
+console.log(dsp.hannWindow(values));
 // [ 0, -0.4999999999999999, 1, -0.5000000000000001, 0 ]
 ```
 
@@ -66,11 +66,11 @@ console.log(utils.hannWindow(values));
 Compute the root mean square of the given Array of values, for example:
 
 ```javascript
-const utils = require('./lib/utils.js'); // Edit path as required
+const dsp = require('./lib/dsp.js'); // Edit path as required
 
 let values = [ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 ];
 
-console.log('The calculated RMS is', utils.rms(values));
+console.log('The calculated RMS is', dsp.rms(values));
 // The calculated RMS is 13.674794331177344
 ```
 

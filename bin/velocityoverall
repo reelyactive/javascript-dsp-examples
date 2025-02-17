@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const utils = require('../lib/utils.js');
+const dsp = require('../lib/dsp.js');
 
 // Edit the following parameters as required
 const SAMPLING_RATE = 2560;
@@ -20,10 +20,10 @@ const samples = Array(NUMBER_OF_SAMPLES).fill().map(generateAccelerationSample);
 let startTime = Date.now();
 
 // Apply a Hann window to the time series
-let windowedSamples = utils.hannWindow(samples);
+let windowedSamples = dsp.hannWindow(samples);
 
 // Perform a FFT on the windowed samples
-let fft = utils.fft(windowedSamples, SAMPLING_RATE);
+let fft = dsp.fft(windowedSamples, SAMPLING_RATE);
 
 // Integrate over frequency (within filter window) to get velocities
 let filteredVelocities = [];
@@ -37,7 +37,7 @@ for(let bin = 0; bin < fft.numberOfBins; bin++) {
 
 // Take the RMS of the velocities divided by the square root of the noise
 // bandwidth of the Hann window (1.5) to obtain velocity overall
-let velocityOverall = utils.rms(filteredVelocities) / Math.sqrt(1.5);
+let velocityOverall = dsp.rms(filteredVelocities) / Math.sqrt(1.5);
 
 console.log('Completed in', Date.now() - startTime, 'ms');
 console.log('velocityOverall:', velocityOverall, 'm/s');
