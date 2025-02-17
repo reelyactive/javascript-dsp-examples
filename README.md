@@ -21,7 +21,7 @@ The velocity overall is calculated as follows:
 - Integration over each frequency bin to obtain velocities
 - RMS of velocities using `rms(values)` divided by square root of Hann noise bandwidth
 
-Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in __bin/velocityoverall__ to test different scenarios.
+Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in [bin/velocityoverall](bin/velocityoverall) to test different scenarios.
 
 
 utils.js
