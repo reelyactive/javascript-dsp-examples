@@ -10,7 +10,8 @@ const MAX_FILTER_FREQUENCY = 1000;
 
 // Adapt this function to generate acceleration sample values (in m/s2)
 function generateAccelerationSample(element, index) {
-  return 9.8 * 2 * (Math.random() - 0.5);
+  return 9.8 * Math.sin(63 * index * 2 * Math.PI / SAMPLING_RATE); // 63Hz
+  //return 9.8 * 2 * (Math.random() - 0.5); // Noise
 }
 
 // The samples will be generated using the above function
@@ -19,27 +20,41 @@ const samples = Array(NUMBER_OF_SAMPLES).fill().map(generateAccelerationSample);
 // Start timing the operation
 let startTime = Date.now();
 
-// Apply a Hann window to the time series
-let windowedSamples = dsp.hannWindow(samples);
+// Split the time series samples into up to four sets of at least 256 samples
+let sampleSets = dsp.createPowerOfTwoLengthSubSamples(samples, 256, 4);
 
-// Perform a FFT on the windowed samples
-let fft = dsp.fft(windowedSamples, SAMPLING_RATE);
+// Calculate and average the velocityOverall subsamples
+let velocityOverallSum = 0;
+sampleSets.forEach((sampleSet, index) => {
+  let velocityOverall = calculateVelocityOverall(sampleSet);
+  console.log('velocityOverall(Set ' + index + '): ' + velocityOverall);
+  velocityOverallSum += velocityOverall;
+});
 
-// Integrate over frequency (within filter window) to get velocities
-let filteredVelocities = [];
-for(let bin = 0; bin < fft.numberOfBins; bin++) {
-  if((fft.frequencies[bin] >= MIN_FILTER_FREQUENCY) &&
-     (fft.frequencies[bin] <= MAX_FILTER_FREQUENCY)) {
-    let velocity = fft.magnitudes[bin] / fft.frequencies[bin];
-    filteredVelocities.push(velocity); 
+// Output the results
+console.log('velocityOverall(*Avg*):', velocityOverallSum / sampleSets.length);
+console.log('Completed in', Date.now() - startTime, 'ms'); 
+
+// Calculate the velocity overall of the given time series samples
+function calculateVelocityOverall(samples) {
+
+  // Apply a Hann window to the time series
+  let windowedSamples = dsp.hannWindow(samples);
+
+  // Perform a FFT on the windowed samples
+  let fft = dsp.fft(windowedSamples, SAMPLING_RATE);
+
+  // Integrate over frequency (within filter window) to get velocities
+  let filteredVelocities = [];
+  for(let bin = 0; bin < fft.numberOfBins; bin++) {
+    if((fft.frequencies[bin] >= MIN_FILTER_FREQUENCY) &&
+       (fft.frequencies[bin] <= MAX_FILTER_FREQUENCY)) {
+      let velocity = fft.magnitudes[bin] / fft.frequencies[bin];
+      filteredVelocities.push(velocity);
+    }
   }
+
+  // Take the RMS of the velocities divided by the square root of the noise
+  // bandwidth of the Hann window (1.5) to obtain velocity overall
+  return dsp.rms(filteredVelocities) / Math.sqrt(1.5);
 }
-
-// Take the RMS of the velocities divided by the square root of the noise
-// bandwidth of the Hann window (1.5) to obtain velocity overall
-let velocityOverall = dsp.rms(filteredVelocities) / Math.sqrt(1.5);
-
-console.log('Completed in', Date.now() - startTime, 'ms');
-console.log('velocityOverall:', velocityOverall, 'm/s');
-console.log('Calculated using', filteredVelocities.length, 'bins filtered from',
-            fft.numberOfBins, 'FFT bins');

@@ -16,10 +16,12 @@ Determine the velocity overall from a time series of acceleration samples.
     npm run velocityoverall
 
 The velocity overall is calculated as follows:
-- Application of Hann window to time series using `hannWindow(samples)`
+- Split into (up to 4) non-overlapping time series of at least 256 samples
+- Application of Hann window to each time series using `hannWindow(samples)`
 - Conversion to frequency domain using `fft(samples, samplingRate)`
 - Integration over each frequency bin to obtain velocities
 - RMS of velocities using `rms(values)` divided by square root of Hann noise bandwidth
+- Average of the (up to 4) overall velocities
 
 Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in [bin/velocityoverall](bin/velocityoverall) to test different scenarios.
 
@@ -72,6 +74,23 @@ let values = [ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 ];
 
 console.log('The calculated RMS is', dsp.rms(values));
 // The calculated RMS is 13.674794331177344
+```
+
+
+### createPowerOfTwoLengthSubSamples(samples, minLength, maxNumberOfSubs)
+
+Split the given samples into a set of subsamples, up to the given maximum number of subsamples, each of the given minimum length or a larger power of two, whichever is greater, for example:
+
+```javascript
+const dsp = require('./lib/dsp.js'); // Edit path as required
+
+let samples = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
+
+console.log(dsp.createPowerOfTwoLengthSubSamples(samples, 2, 2));
+// [ [ 0, 1, 2, 3 ], [ 6, 7, 8, 9 ] ]
+
+console.log(dsp.createPowerOfTwoLengthSubSamples(samples, 2, 4));
+// [ [ 0, 1 ], [ 3, 4 ], [ 6, 7 ], [ 9, 10 ] ]
 ```
 
 
