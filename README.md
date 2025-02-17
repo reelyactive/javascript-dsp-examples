@@ -16,12 +16,12 @@ Determine the velocity overall from a time series of acceleration samples.
     npm run velocityoverall
 
 The velocity overall is calculated as follows:
-- Application of Hann window to time series using hannWindow(samples)
-- Conversion to frequency domain using fft(samples, samplingRate)
+- Application of Hann window to time series using `hannWindow(samples)`
+- Conversion to frequency domain using `fft(samples, samplingRate)`
 - Integration over each frequency bin to obtain velocities
-- RMS of velocities divided by square root of Hann noise bandwidth
+- RMS of velocities using `rms(values)` divided by square root of Hann noise bandwidth
 
-Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in `bin/velocityoverall` to test different scenarios.
+Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in __bin/velocityoverall__ to test different scenarios.
 
 
 utils.js
