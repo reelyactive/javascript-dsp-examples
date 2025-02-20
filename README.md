@@ -16,6 +16,7 @@ Determine the velocity overall from a time series of acceleration samples.
     npm run velocityoverall
 
 The velocity overall is calculated as follows:
+- Remove any DC offset from the samples
 - Split into (up to 4) non-overlapping time series of at least 256 samples
 - Application of Hann window to each time series using `hannWindow(samples)`
 - Conversion to frequency domain using `fft(samples, samplingRate)`
@@ -74,6 +75,27 @@ let values = [ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 ];
 
 console.log('The calculated RMS is', dsp.rms(values));
 // The calculated RMS is 13.674794331177344
+```
+
+
+### dcOffset(values, offset)
+
+Offset the given values by the given offset.  If no offset is provided, the mean of the values will be used as the offset, effectively removing any DC offset from the values.
+
+The values can be either an Array of Numbers of an Array of Array.  In the latter case, the function will use self-recursion.
+
+```javascript
+const dsp = require('./lib/dsp.js'); // Edit path as required
+
+let values = [ 1, -1, 1, -1, 1 ];
+
+console.log(dsp.dcOffset(values, 1));
+// [ 2, 0, 2, 0, 2 ]
+
+values = [ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ] ];
+
+console.log(dsp.dcOffset(values));
+// [ [ -0.5, 0.5 ], [ -0.5, 0.5 ], [ -0.5, 0.5 ] ]
 ```
 
 

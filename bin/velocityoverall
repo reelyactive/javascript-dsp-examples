@@ -20,8 +20,12 @@ const samples = Array(NUMBER_OF_SAMPLES).fill().map(generateAccelerationSample);
 // Start timing the operation
 let startTime = Date.now();
 
+// Remove any DC offset from the samples
+let offsetSamples = dsp.dcOffset(samples);
+console.log(offsetSamples);
+
 // Split the time series samples into up to four sets of at least 256 samples
-let sampleSets = dsp.createPowerOfTwoLengthSubSamples(samples, 256, 4);
+let sampleSets = dsp.createPowerOfTwoLengthSubSamples(offsetSamples, 256, 4);
 
 // Calculate and average the velocityOverall subsamples
 let velocityOverallSum = 0;
