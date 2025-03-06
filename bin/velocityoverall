@@ -22,7 +22,6 @@ let startTime = Date.now();
 
 // Remove any DC offset from the samples
 let offsetSamples = dsp.dcOffset(samples);
-console.log(offsetSamples);
 
 // Split the time series samples into up to four sets of at least 256 samples
 let sampleSets = dsp.createPowerOfTwoLengthSubSamples(offsetSamples, 256, 4);
@@ -31,12 +30,14 @@ let sampleSets = dsp.createPowerOfTwoLengthSubSamples(offsetSamples, 256, 4);
 let velocityOverallSum = 0;
 sampleSets.forEach((sampleSet, index) => {
   let velocityOverall = calculateVelocityOverall(sampleSet);
-  console.log('velocityOverall(Set ' + index + '): ' + velocityOverall);
+  console.log('velocityOverall(Set ' + index + '): ' +
+              velocityOverall.toPrecision(4) + 'm/s\r\n');
   velocityOverallSum += velocityOverall;
 });
 
 // Output the results
-console.log('velocityOverall(*Avg*):', velocityOverallSum / sampleSets.length);
+console.log('velocityOverall(*Avg*): ' +
+            (velocityOverallSum / sampleSets.length).toPrecision(4) + 'm/s');
 console.log('Completed in', Date.now() - startTime, 'ms'); 
 
 // Calculate the velocity overall of the given time series samples
@@ -48,6 +49,9 @@ function calculateVelocityOverall(samples) {
   // Perform a FFT on the windowed samples
   let fft = dsp.fft(windowedSamples, SAMPLING_RATE);
 
+  // Prepare variables to highlight the peak
+  let peakFrequency, peakVelocity, peakAcceleration = 0;
+
   // Integrate over frequency (within filter window) to get velocities
   let filteredVelocities = [];
   for(let bin = 0; bin < fft.numberOfBins; bin++) {
@@ -55,8 +59,19 @@ function calculateVelocityOverall(samples) {
        (fft.frequencies[bin] <= MAX_FILTER_FREQUENCY)) {
       let velocity = fft.magnitudes[bin] / fft.frequencies[bin];
       filteredVelocities.push(velocity);
+
+      if(fft.magnitudes[bin] > peakAcceleration) {
+        peakFrequency = fft.frequencies[bin];
+        peakAcceleration = fft.magnitudes[bin];
+        peakVelocity = velocity;
+      }
     }
   }
+
+  // Print the peak frequency/acceleration/velocity
+  console.log('Peak acceleration at ' + peakFrequency + 'Hz with ' +
+              peakAcceleration.toPrecision(3) + 'm/s2 and ' +
+              peakVelocity.toPrecision(3) + 'm/s');
 
   // Take the RMS of the velocities divided by the square root of the noise
   // bandwidth of the Hann window (1.5) to obtain velocity overall
