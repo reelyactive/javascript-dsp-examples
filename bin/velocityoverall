@@ -57,7 +57,7 @@ function calculateVelocityOverall(samples) {
   for(let bin = 0; bin < fft.numberOfBins; bin++) {
     if((fft.frequencies[bin] >= MIN_FILTER_FREQUENCY) &&
        (fft.frequencies[bin] <= MAX_FILTER_FREQUENCY)) {
-      let velocity = fft.magnitudes[bin] / fft.frequencies[bin];
+      let velocity = fft.magnitudes[bin] / (2 * Math.PI * fft.frequencies[bin]);
       filteredVelocities.push(velocity);
 
       if(fft.magnitudes[bin] > peakAcceleration) {
