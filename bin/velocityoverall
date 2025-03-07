@@ -73,7 +73,14 @@ function calculateVelocityOverall(samples) {
               peakAcceleration.toPrecision(3) + 'm/s2 and ' +
               peakVelocity.toPrecision(3) + 'm/s');
 
-  // Take the RMS of the velocities divided by the square root of the noise
-  // bandwidth of the Hann window (1.5) to obtain velocity overall
-  return dsp.rms(filteredVelocities) / Math.sqrt(1.5);
+  // Calculate velocity overall as the sum the squares of the velocities in the
+  // frequency domain, multiplying by 2 to account for symmetry in the Fourier
+  // Transform, and then taking the square root.
+  let sumOfSquares = filteredVelocities.reduce((sum, value) =>
+                                                        sum + (value * value));
+  let velocityOverall = Math.sqrt(2 * sumOfSquares);
+
+  // Divide by the square root of the noise bandwidth of the Hann window (1.5)
+  // to correct for the the window applied in the time series
+  return velocityOverall / Math.sqrt(1.5);
 }
