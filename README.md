@@ -22,6 +22,8 @@ Completed in ### ms
 Peak magnitude of 0.9934 at 440.1Hz
 ```
 
+Edit the parameters in [bin/fft](bin/fft) to test different scenarios.
+
 ### velocityOverall
 
 Determine the velocity overall from a time series of acceleration samples.
@@ -37,7 +39,27 @@ The velocity overall is calculated as follows:
 - RMS of velocities divided by square root of Hann noise bandwidth
 - Average of the (up to 4) overall velocities
 
-Assuming acceleration samples are in m/s2 and the samplingRate is in Hz, the velocity overall will be in m/s.  Edit the parameters in [bin/velocityoverall](bin/velocityoverall) to test different scenarios.
+Assuming acceleration samples are in m/s^2 and the samplingRate is in Hz, the velocity overall will be in m/s.  The example uses a 63Hz sine wave of magnitude 1g (9.8m/s^2) sampled at 2560Hz using 4096 samples and should output the following:
+
+```console
+Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
+velocityOverall(Set 0): 0.01756m/s
+
+Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
+velocityOverall(Set 1): 0.01758m/s
+
+Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
+velocityOverall(Set 2): 0.01755m/s
+
+Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
+velocityOverall(Set 3): 0.01758m/s
+
+velocityOverall(*Avg*): 0.01757m/s
+Completed in ## ms
+```
+
+
+Edit the parameters in [bin/velocityoverall](bin/velocityoverall) to test different scenarios.
 
 
 dsp.js
