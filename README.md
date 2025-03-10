@@ -3,6 +3,8 @@ javascript-dsp-examples
 
 Examples of digital signal processing in pure JavaScript.  The code is adapted from [node-fft (fft-js)](https://github.com/vail-systems/node-fft/) and remains intended primarily for _example_ purposes as it is __not__ optimised for efficiency.
 
+The [lib/dsp.js](lib/dsp.js) file is nonetheless coded with reusability and portability in mind, such that it should be straightforward for developers to use part or all of the library of functions in either Node.js (ex: [advlib-ble-gatt](https://github.com/reelyactive/advlib-ble-gatt)) or in client-side applications. 
+
 
 Examples
 --------
@@ -57,7 +59,6 @@ velocityOverall(Set 3): 0.01758m/s
 velocityOverall(*Avg*): 0.01757m/s
 Completed in ## ms
 ```
-
 
 Edit the parameters in [bin/velocityoverall](bin/velocityoverall) to test different scenarios.
 
