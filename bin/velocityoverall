@@ -10,7 +10,7 @@ const MAX_FILTER_FREQUENCY = 1000;
 
 // Adapt this function to generate acceleration sample values (in m/s2)
 function generateAccelerationSample(element, index) {
-  return 9.8 / 500 * Math.sin(63 * index * 2 * Math.PI / SAMPLING_RATE); // 63Hz
+  return 9.8 * Math.sin(63 * index * 2 * Math.PI / SAMPLING_RATE); // 63Hz, 1g
   //return 9.8 * 2 * (Math.random() - 0.5); // Noise
 }
 
