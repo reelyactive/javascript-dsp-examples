@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+const dsp = require('../lib/dsp.js');
+
+// Edit the following parameters as required
+const SAMPLING_RATE = 44100;
+const NUMBER_OF_SAMPLES = 32768;
+
+// Adapt this function to generate sample values
+function generateSample(element, index) {
+  return Math.cos(440 * index * 2 * Math.PI / SAMPLING_RATE); // 440Hz (A4)
+}
+
+// The samples will be generated using the above function
+const samples = Array(NUMBER_OF_SAMPLES).fill().map(generateSample);
+
+// Start timing the operation
+let startTime = Date.now();
+
+// Perform a FFT on the samples
+let fft = dsp.fft(samples, SAMPLING_RATE);
+
+// Display the operation duration
+console.log('Completed in', Date.now() - startTime, 'ms');
+
+// Prepare variables to highlight the peak
+let peakFrequency, peakMagnitude = 0;
+
+// Iterate through all frequency bins to find the peak magnitude
+for(let bin = 0; bin < fft.numberOfBins; bin++) {
+  if(fft.magnitudes[bin] > peakMagnitude) {
+    peakFrequency = fft.frequencies[bin];
+    peakMagnitude = fft.magnitudes[bin];
+  }
+}
+
+// Print the peak frequency/magnitude
+console.log('Peak magnitude of ' + peakMagnitude.toPrecision(4) + ' at ' +
+            peakFrequency.toPrecision(4) + 'Hz');

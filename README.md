@@ -9,6 +9,19 @@ Examples
 
 Examples are provided in the /bin folder, each of which can be run with the command `npm run exampleName`.  Clone this repository and run the commands from its root folder.
 
+### fft
+
+Perform a Fast Fourier Transform on a time series of audio samples.
+
+    npm run fft
+
+The example uses a 440Hz sine wave of amplitude 1 sampled at 44.1kHz using 32768 samples and should output the following:
+
+```console
+Completed in ### ms
+Peak magnitude of 0.9934 at 440.1Hz
+```
+
 ### velocityOverall
 
 Determine the velocity overall from a time series of acceleration samples.
