@@ -35,7 +35,7 @@ The velocity overall is calculated as follows:
 - Split into (up to 4) non-overlapping time series of at least 256 samples
 - Application of Hann window to each time series using `hannWindow(samples)`
 - Conversion to frequency domain using `fft(samples, samplingRate)`
-- Integration over each frequency bin to obtain velocities
+- Integration over each frequency bin from 10Hz to 1000Hz to obtain velocities
 - RMS of velocities divided by square root of Hann noise bandwidth
 - Average of the (up to 4) overall velocities
 
