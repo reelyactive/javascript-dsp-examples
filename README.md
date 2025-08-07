@@ -45,18 +45,18 @@ Assuming acceleration samples are in m/s^2 and the samplingRate is in Hz, the ve
 
 ```console
 Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
-velocityOverall(Set 0): 0.01756m/s
+velocityOverall(Set 0): 0.01751m/s
 
 Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
-velocityOverall(Set 1): 0.01758m/s
+velocityOverall(Set 1): 0.01751m/s
 
 Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
-velocityOverall(Set 2): 0.01755m/s
+velocityOverall(Set 2): 0.01751m/s
 
 Peak acceleration at 62.5Hz with 4.77m/s2 and 0.0121m/s
-velocityOverall(Set 3): 0.01758m/s
+velocityOverall(Set 3): 0.01751m/s
 
-velocityOverall(*Avg*): 0.01757m/s
+velocityOverall(*Avg*): 0.01751m/s
 Completed in ## ms
 ```
 

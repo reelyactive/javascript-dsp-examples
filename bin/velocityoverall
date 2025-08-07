@@ -77,7 +77,7 @@ function calculateVelocityOverall(samples) {
   // frequency domain, multiplying by 2 to account for symmetry in the Fourier
   // Transform, and then taking the square root.
   let sumOfSquares = filteredVelocities.reduce((sum, value) =>
-                                                        sum + (value * value));
+                                                     sum + (value * value), 0);
   let velocityOverall = Math.sqrt(2 * sumOfSquares);
 
   // Divide by the square root of the noise bandwidth of the Hann window (1.5)
